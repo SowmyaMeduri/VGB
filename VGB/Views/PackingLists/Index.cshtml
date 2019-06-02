@@ -1,0 +1,256 @@
+@model IEnumerable<VGB.Models.PackingList>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+        .modal-body {
+            overflow-x: auto;
+        }
+
+        .modal-dialog {
+            padding: 30px;
+            width: 100%;
+        }
+
+        table {
+            counter-reset: rowNumber;
+        }
+
+            /*table tr {
+              counter-increment: rowNumber;
+          }*/
+
+            table tr td:first-child::before {
+                counter-increment: rowNumber;
+                content: counter(rowNumber);
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Packing List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table id="tblCustomers" class="table" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="width:150px">Sno</th>
+                                    <th style="width:150px">Item</th>
+                                    <th style="width:150px">RollNo</th>
+                                    <th style="width:150px">Colour</th>
+                                    <th style="width:150px">Gsm</th>
+                                    <th style="width:150px">Width</th>
+                                    @*<th style="width:150px">RollStatus</th>*@
+                                    <th style="width:150px">netwt</th>
+                                    <th style="width:150px">Remarks</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var list in Model)
+                                {
+                                    <tr>
+                                        <td>@list.S_No</td>
+                                        <td>@list.Item</td>
+                                        <td>@list.Roll_No</td>
+                                        <td>@list.Colour</td>
+                                        <td>@list.Gsm</td>
+                                        <td>@list.Width</td>
+                                        @*<td>@list.RollStatus</td>*@
+                                        <td>@list.NetWt</td>
+                                        <td>@list.Remarks</td>
+
+                                        <td><input type="button" value="Remove" onclick="Remove(this)" /></td>
+                                        <td><input type="button" value="Edit" onclick="Edit(this)" /></td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+
+                                    <td><label id="txtsno" /></td>
+                                    <td><input type="text" id="item" /></td>
+                                    <td><input type="text" id="rollno" /></td>
+                                    <td><input type="text" id="colour" /></td>
+                                    <td><input type="text" id="gsm" /></td>
+                                    <td><input type="text" id="width" /></td>
+                                    @*<td><input type="text" id="RollStatus" /></td>*@
+                                    <td><input type="text" id="netwt" /></td>
+                                    <td><input type="text" id="remarks" /></td>
+                                    <td><input type="button" id="btnAdd" value="Add" /></td>
+                                </tr>
+                                <input type="button" id="btnSave" value="Save All" />
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+    <script type="text/javascript">
+        $("body").on("click", "#btnAdd", function () {
+            debugger;
+            //Reference the Name and Country TextBoxes.
+            //var Sno = document.getElementById("txtsno").htmlFor;
+            var Item = $("#item");
+            var rollno = $("#rollno");
+            var colour = $("#colour");
+            var gsm = $("#gsm");
+            var Width = $("#width");
+            //var Status = $("#RollStatus");
+            var netwt = $("#netwt");
+            var Remarks = $("#remarks");
+
+
+            //Get the reference of the Table's TBODY element.
+            var tBody = $("#tblCustomers > TBODY")[0];
+
+            //Add Row.
+            var row = tBody.insertRow(-1);
+
+            //Add sno cell.
+            var cell = $(row.insertCell(-1));
+            cell.html("<label id='cellsno' readonly='readonly' />");
+
+            //Add item cell.
+            cell = $(row.insertCell(-1));
+            cell.html("<input id='cellitem' readonly='readonly' type='text' value='" + Item.val() + "'/>");
+
+            cell = $(row.insertCell(-1));
+            cell.html("<input id='cellrollno' readonly='readonly'  type='text' value='" + rollno.val() + "'/>");
+
+            cell = $(row.insertCell(-1));
+            cell.html("<input id='cellcolour' readonly='readonly'  type='text' value='" + colour.val() + "'/>");
+
+            cell = $(row.insertCell(-1));
+            cell.html("<input id='cellgsm' readonly='readonly'  type='text' value='" + gsm.val() + "'/>");
+
+            cell = $(row.insertCell(-1));
+            cell.html("<input id='cellwidth' readonly='readonly'  type='text' value='" + Width.val() + "'/>");
+
+            //cell = $(row.insertCell(-1));
+            //cell.html(Status.val());
+
+            cell = $(row.insertCell(-1));
+            cell.html("<input id='cellweight' readonly='readonly'  type='text' value='" + netwt.val() + "'/>");
+
+            cell = $(row.insertCell(-1));
+            cell.html("<input id='cellremarks' readonly='readonly'  type='text' value='" + Remarks.val() + "'/>");
+
+
+
+            //Add Button cell.
+            debugger;
+            cell = $(row.insertCell(-1));
+            var btnRemove = $("<input />");
+            btnRemove.attr("type", "button");
+            btnRemove.attr("onclick", "Remove(this);");
+            btnRemove.val("Remove");
+            cell.append(btnRemove);
+
+            //edit button cell
+            cell = $(row.insertCell(-1));
+            var btnEdit = $("<input />");
+            btnEdit.attr("type", "button");
+            btnEdit.attr("onclick", "Edit(this);");
+            btnEdit.val("Edit");
+            cell.append(btnEdit);
+
+            //Clear the TextBoxes.
+            //Sno.val("");
+            Item.val("");
+            rollno.val("");
+            colour.val("");
+            gsm.val("");
+            Width.val("");
+            //RollStatus.val("");
+            netwt.val("");
+            Remarks.val("");
+        });
+
+        function Remove(button) {
+            debugger;
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            var name = $("TD", row).eq(0).html();
+            if (confirm("Do you want to delete: " + name)) {
+                //Get the reference of the Table.
+                var table = $("#tblCustomers")[0];
+
+                //Delete the Table row using it's Index.
+                table.deleteRow(row[0].rowIndex);
+            }
+        };
+
+        function Edit(button) {
+            debugger;
+            //var row = $(button).closest("TR");
+            //var name = $("TD", row).eq(0).html();
+            //$(this).closest('TD').attr('contenteditable', 'true');
+            //$(this).focus();
+            //document.getElementById('cellsno').removeAttribute('readonly');
+            document.getElementById('cellitem').removeAttribute('readonly');
+            document.getElementById('cellrollno').removeAttribute('readonly');
+            document.getElementById('cellcolour').removeAttribute('readonly');
+            document.getElementById('cellgsm').removeAttribute('readonly');
+            document.getElementById('cellwidth').removeAttribute('readonly');
+            document.getElementById('cellweight').removeAttribute('readonly');
+            document.getElementById('cellremarks').removeAttribute('readonly');
+        }
+
+        $("body").on("click", "#btnSave", function () {
+            //Loop through the Table rows and build a JSON array.
+            var customers = new Array();
+            $("#tblCustomers TBODY TR").each(function () {
+                var row = $(this);
+                var customer = {};
+                debugger;
+                //customer.S_No = row.find("TD").eq(0).children()[0].value;
+                customer.Item = row.find("TD").eq(1).children()[0].value;
+                customer.Roll_No = row.find("TD").eq(2).children()[0].value;
+                customer.Colour = row.find("TD").eq(3).children()[0].value;
+                customer.Gsm = row.find("TD").eq(4).children()[0].value;
+                customer.Width = row.find("TD").eq(5).children()[0].value;
+                //customer.RollStatus = row.find("TD").eq(6).html();
+                customer.NetWt = row.find("TD").eq(6).children()[0].value;
+                customer.Remarks = row.find("TD").eq(7).children()[0].value;
+                customers.push(customer);
+            });
+            $(".close").click();
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+                url: "/JobWorks/InsertCustomers",
+                data: JSON.stringify(customers),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    debugger;
+                    //alert(r + " record(s) inserted.");
+                    var url = window.location.href.substring(0, window.location.href.indexOf('/') + 1);
+                    window.location.replace(url + "JobWorks/Create");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

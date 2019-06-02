@@ -1,0 +1,281 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<VGB.Models.ProductionCard>
+
+
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+}
+
+<h2>Production Card Details</h2>
+
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+<p>
+    @using (Html.BeginForm("Index", "ProductionCard", FormMethod.Get))
+    {
+        @*@Html.TextBox("name") <input type="submit" value="Search"  />*@
+
+        <input type="search" id="search" name="searchText" placeholder="search" class="form-control" autocomplete="off" /> @*onkeypress="keypress1(event,this);"*@
+    }
+</p>
+@using (Html.BeginForm("ExportToExcel", "ProductionCard", FormMethod.Post))
+{
+    @*<div style="overflow-x:auto;">*@
+        <table class="table table-bordered" border="1" id="myt">
+            <tbody>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().productionId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Rsize)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Gsm)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Colour)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().PCol)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().BagSize)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Kgs)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().NoOfPCS)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Remarks)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().partyName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().shift)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Created_By)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().PLNo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().DCNO)
+                    </th>
+                    <th></th>
+                </tr>
+                @if (Model.Count() == 0)
+                {
+                    <tr>
+                        <td colspan="14"> No party found with your search...Try again</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.productionId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Rsize)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Gsm)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Colour)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PCol)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Type)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BagSize)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Kgs)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NoOfPCS)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Remarks)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.partyName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.shift)
+                            </td>
+                            <td>
+
+                                @if (item.status.Trim() == "Open")
+                                {
+                                    @Html.ActionLink(item.status, null, null, new { onclick = " return GetSelectedRow(this);" });
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.status);
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Created_By)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PLNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DCNO)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.productionId }, null) |
+                                @*@Html.ActionLink("Details", "Details", new { id=item.productionId }) |*@
+                                @Html.ActionLink("Delete", "Delete", new { id = item.productionId }, null)
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        @*</div>*@
+        if (@ViewBag.Bool ?? false)
+        {
+        <div>
+            <b>TotalWeight : </b>  <b>@ViewBag.TotalWeight </b>
+        </div>
+        <div>
+            <b>ClosedWt : </b>  <b>@ViewBag.ClosedWeight </b>
+        </div>
+        <div>
+            <b>RemainingWt : </b>  <b>@ViewBag.remainingWeight </b>
+        </div>
+        @*<style>
+                table, th, td {
+                    border-collapse: collapse;
+                }
+
+                th, td {
+                    padding: 5px;
+                }
+
+                th {
+                    text-align: left;
+                }
+            </style>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>
+                            TotalWeight
+                        </th>
+                        <th>
+                            CompletedWeight
+                        </th>
+                        <th>
+                            RemainingWeight
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                                @ViewBag.TotalWeight
+                        </td>
+                        <td>
+                            @ViewBag.ClosedWeight
+                        </td>
+                        <td>
+                           @ViewBag.remainingWeight
+                        </td>
+                    </tr>
+                </tbody>
+            </table>*@
+
+
+        @*<text style="font-weight:100">TotalWeight:</text><b>@ViewBag.TotalWeight</b>
+            <text> Completed</text> <b>@ViewBag.ClosedWeight</b>
+            <text> RemainingWT</text> <b>@ViewBag.remainingWeight </b>*@
+
+
+
+        }
+
+        @Html.PagedListPager(Model, pageNo => Url.Action("Index", new { pageNo, name = Request.QueryString["name"] }))
+        <input type="submit" value="Export to Excel" class="button" />
+        <input type="button" value="print" onclick="printTbl()" />
+        <script type="text/javascript">
+            function printTbl() {
+                var TableToPrint = myt;
+                newWin = window.open("");
+                newWin.document.write(TableToPrint.outerHTML);
+                newWin.print();
+                newWin.close();
+            }
+        </script>
+        <script type="text/javascript">
+            function keypress1(evt, t) {
+                var code = evt.key;
+                if (window.event) {
+                    var url = window.location.href.substring(0, window.location.href.indexOf('/') + 1);
+                    window.location.replace(url + "ProductionCard/index?code=" + code);
+                }
+            }
+            //$(document).ready(function () {
+            //    $('#search').keyup(function () {
+            //        search_table($(this).val());
+            //    });
+            //    function search_table(value) {
+            //        $('#myt tr').each(function () {
+            //            var found = 'false';
+            //            $(this).each(function () {
+            //                if ($(this).text().toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+            //                    found = 'true';
+            //                }
+            //            });
+            //            if (found == 'true') {
+            //                $(this).show();
+            //            }
+            //            else {
+            //                $(this).hide();
+            //            }
+            //        });
+            //    }
+            //});
+
+        </script>
+        <script type="text/javascript">
+            function GetSelectedRow(link) {
+                var tr = $(link).parent().parent();
+                var id = $(tr[0]).find('td').eq(0).text().trim();
+                var message = "Do you want the change Roll status to Close";
+                var res = window.confirm(message);
+                if (res) {
+                    var url = window.location.href.substring(0, window.location.href.indexOf('/') + 1);
+                    window.location.replace(url + "ProductionCard/Popup?id=" + id);
+                }
+                return false;
+            }
+        </script>
+        }

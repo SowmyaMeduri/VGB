@@ -1,0 +1,179 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<VGB.Models.ProductionCard>
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Delivery Status</h2>
+
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+<p>
+    @*@using (Html.BeginForm("Index", "ProductionCard", FormMethod.Get))
+        {
+            @Html.TextBox("name") <input type="submit" value="Search" autocomplete="off" />
+        }*@
+    <input type="search" id="search" name="searchText" placeholder="search" class="form-control" />
+</p>
+@using (Html.BeginForm("ExportToExcel", "Deliveries", FormMethod.Post))
+{
+    <table class="table table-bordered" border="1" id="myt">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().productionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Rsize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Gsm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Colour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().PCol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().BagSize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Kgs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().NoOfPCS)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().partyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().shift)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Created_By)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().PLNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().DCNO)
+            </th>
+        </tr>
+        @if (Model.Count() == 0)
+        {
+            <tr>
+                <td colspan="14"> No party found with your search...Try again</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.productionId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rsize)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Gsm)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Colour)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PCol)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BagSize)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Kgs)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NoOfPCS)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Remarks)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.partyName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.shift)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PLNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DCNO)
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#search').keyup(function () {
+            search_table($(this).val());
+        });
+        function search_table(value) {
+            $('#myt tr').each(function () {
+                var found = 'false';
+                $(this).each(function () {
+                    if ($(this).text().toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+                        found = 'true';
+                    }
+                });
+                if (found == 'true') {
+                    $(this).show();
+                }
+                else {
+                    $(this).hide();
+                }
+            });
+        }
+    });
+</script>
+@Html.PagedListPager(Model, pageNo => Url.Action("Index", new { pageNo, name = Request.QueryString["name"] }))
+<input type="submit" value="Export to Excel" class="button" />
+<input type="button" value="print" onclick="printTbl()" />
+<script type="text/javascript">
+    function printTbl() {
+        var TableToPrint = myt;
+        newWin = window.open("");
+        newWin.document.write(TableToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+</script>
+}

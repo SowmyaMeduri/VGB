@@ -1,0 +1,406 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="VGBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Delivery">
+          <Key>
+            <PropertyRef Name="deliveryId" />
+          </Key>
+          <Property Name="deliveryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="partyName" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="productionId" Type="int" Nullable="false" />
+          <Property Name="deliveryStatus" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobWork">
+          <Key>
+            <PropertyRef Name="JobWorkId" />
+          </Key>
+          <Property Name="JobWorkId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Created_By" Type="nchar" MaxLength="10" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="CustomerName" Type="varchar" MaxLength="50" />
+          <Property Name="PLNo" Type="nchar" MaxLength="10" />
+          <Property Name="DCNO" Type="nchar" MaxLength="10" />
+          <Property Name="InvoiceNo" Type="int" />
+          <Property Name="NetWt" Type="nchar" MaxLength="10" />
+          <Property Name="TotalRolls" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="ordersInvoiceNo" />
+          </Key>
+          <Property Name="OrderId" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="ordersInvoiceNo" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Rsize" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Gsm" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Colour" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="NetWt" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="BagSize" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="RollStatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Remarks" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PartyName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PLNo" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="DCNo" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PackingList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="S.No" Type="int" />
+          <Property Name="Item" Type="nchar" MaxLength="10" />
+          <Property Name="Roll No" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="Colour" Type="nchar" MaxLength="10" />
+          <Property Name="Gsm" Type="nchar" MaxLength="10" />
+          <Property Name="Width" Type="nchar" MaxLength="10" />
+          <Property Name="RollStatus" Type="nchar" MaxLength="10" />
+          <Property Name="NetWt" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="Remarks" Type="nchar" MaxLength="10" />
+          <Property Name="JobWorkId" Type="int" />
+        </EntityType>
+        <EntityType Name="ProductionCard">
+          <Key>
+            <PropertyRef Name="productionId" />
+          </Key>
+          <Property Name="productionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobWorkId" Type="int" Nullable="false" />
+          <Property Name="Created_By" Type="nchar" MaxLength="10" />
+          <Property Name="Rsize" Type="nchar" MaxLength="10" />
+          <Property Name="Gsm" Type="nchar" MaxLength="10" />
+          <Property Name="Colour" Type="nchar" MaxLength="10" />
+          <Property Name="PCol" Type="nchar" MaxLength="10" />
+          <Property Name="Type" Type="nchar" MaxLength="10" />
+          <Property Name="BagSize" Type="nchar" MaxLength="10" />
+          <Property Name="Kgs" Type="nchar" MaxLength="10" />
+          <Property Name="NoOfPCS" Type="nchar" MaxLength="10" />
+          <Property Name="Remarks" Type="varchar" MaxLength="50" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="partyName" Type="varchar" MaxLength="50" />
+          <Property Name="shift" Type="nchar" MaxLength="10" />
+          <Property Name="status" Type="nchar" MaxLength="10" />
+          <Property Name="PLNo" Type="nchar" MaxLength="10" />
+          <Property Name="DCNO" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK_Delivery_ProductionCard">
+          <End Role="ProductionCard" Type="Self.ProductionCard" Multiplicity="1" />
+          <End Role="Delivery" Type="Self.Delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductionCard">
+              <PropertyRef Name="productionId" />
+            </Principal>
+            <Dependent Role="Delivery">
+              <PropertyRef Name="productionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PackingList_JobWork">
+          <End Role="JobWork" Type="Self.JobWork" Multiplicity="0..1" />
+          <End Role="PackingList" Type="Self.PackingList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobWork">
+              <PropertyRef Name="JobWorkId" />
+            </Principal>
+            <Dependent Role="PackingList">
+              <PropertyRef Name="JobWorkId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductionCard_JobWork">
+          <End Role="JobWork" Type="Self.JobWork" Multiplicity="1" />
+          <End Role="ProductionCard" Type="Self.ProductionCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobWork">
+              <PropertyRef Name="JobWorkId" />
+            </Principal>
+            <Dependent Role="ProductionCard">
+              <PropertyRef Name="JobWorkId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VGBModelStoreContainer">
+          <EntitySet Name="Delivery" EntityType="Self.Delivery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobWork" EntityType="Self.JobWork" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PackingList" EntityType="Self.PackingList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductionCard" EntityType="Self.ProductionCard" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Delivery_ProductionCard" Association="Self.FK_Delivery_ProductionCard">
+            <End Role="ProductionCard" EntitySet="ProductionCard" />
+            <End Role="Delivery" EntitySet="Delivery" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PackingList_JobWork" Association="Self.FK_PackingList_JobWork">
+            <End Role="JobWork" EntitySet="JobWork" />
+            <End Role="PackingList" EntitySet="PackingList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductionCard_JobWork" Association="Self.FK_ProductionCard_JobWork">
+            <End Role="JobWork" EntitySet="JobWork" />
+            <End Role="ProductionCard" EntitySet="ProductionCard" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VGBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Delivery">
+          <Key>
+            <PropertyRef Name="deliveryId" />
+          </Key>
+          <Property Name="deliveryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="partyName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="productionId" Type="Int32" Nullable="false" />
+          <Property Name="deliveryStatus" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ProductionCard" Relationship="Self.FK_Delivery_ProductionCard" FromRole="Delivery" ToRole="ProductionCard" />
+        </EntityType>
+        <EntityType Name="JobWork">
+          <Key>
+            <PropertyRef Name="JobWorkId" />
+          </Key>
+          <Property Name="JobWorkId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Created_By" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PLNo" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="DCNO" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="InvoiceNo" Type="Int32" />
+          <Property Name="NetWt" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="TotalRolls" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="PackingLists" Relationship="Self.FK_PackingList_JobWork" FromRole="JobWork" ToRole="PackingList" />
+          <NavigationProperty Name="ProductionCards" Relationship="Self.FK_ProductionCard_JobWork" FromRole="JobWork" ToRole="ProductionCard" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="ordersInvoiceNo" />
+          </Key>
+          <Property Name="OrderId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="ordersInvoiceNo" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Rsize" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Gsm" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Colour" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NetWt" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BagSize" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="RollStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PartyName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PLNo" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="DCNo" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PackingList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="S_No" Type="Int32" />
+          <Property Name="Item" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Roll_No" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Colour" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Gsm" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Width" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="RollStatus" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="NetWt" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Remarks" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="JobWorkId" Type="Int32" />
+          <NavigationProperty Name="JobWork" Relationship="Self.FK_PackingList_JobWork" FromRole="PackingList" ToRole="JobWork" />
+        </EntityType>
+        <EntityType Name="ProductionCard">
+          <Key>
+            <PropertyRef Name="productionId" />
+          </Key>
+          <Property Name="productionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobWorkId" Type="Int32" Nullable="false" />
+          <Property Name="Created_By" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Rsize" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Gsm" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Colour" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="PCol" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BagSize" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Kgs" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="NoOfPCS" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="partyName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="shift" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="PLNo" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="DCNO" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Deliveries" Relationship="Self.FK_Delivery_ProductionCard" FromRole="ProductionCard" ToRole="Delivery" />
+          <NavigationProperty Name="JobWork" Relationship="Self.FK_ProductionCard_JobWork" FromRole="ProductionCard" ToRole="JobWork" />
+        </EntityType>
+        <Association Name="FK_Delivery_ProductionCard">
+          <End Role="ProductionCard" Type="Self.ProductionCard" Multiplicity="1" />
+          <End Role="Delivery" Type="Self.Delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductionCard">
+              <PropertyRef Name="productionId" />
+            </Principal>
+            <Dependent Role="Delivery">
+              <PropertyRef Name="productionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PackingList_JobWork">
+          <End Role="JobWork" Type="Self.JobWork" Multiplicity="0..1" />
+          <End Role="PackingList" Type="Self.PackingList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobWork">
+              <PropertyRef Name="JobWorkId" />
+            </Principal>
+            <Dependent Role="PackingList">
+              <PropertyRef Name="JobWorkId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductionCard_JobWork">
+          <End Role="JobWork" Type="Self.JobWork" Multiplicity="1" />
+          <End Role="ProductionCard" Type="Self.ProductionCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobWork">
+              <PropertyRef Name="JobWorkId" />
+            </Principal>
+            <Dependent Role="ProductionCard">
+              <PropertyRef Name="JobWorkId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VGBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Deliveries" EntityType="Self.Delivery" />
+          <EntitySet Name="JobWorks" EntityType="Self.JobWork" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="PackingLists" EntityType="Self.PackingList" />
+          <EntitySet Name="ProductionCards" EntityType="Self.ProductionCard" />
+          <AssociationSet Name="FK_Delivery_ProductionCard" Association="Self.FK_Delivery_ProductionCard">
+            <End Role="ProductionCard" EntitySet="ProductionCards" />
+            <End Role="Delivery" EntitySet="Deliveries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PackingList_JobWork" Association="Self.FK_PackingList_JobWork">
+            <End Role="JobWork" EntitySet="JobWorks" />
+            <End Role="PackingList" EntitySet="PackingLists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductionCard_JobWork" Association="Self.FK_ProductionCard_JobWork">
+            <End Role="JobWork" EntitySet="JobWorks" />
+            <End Role="ProductionCard" EntitySet="ProductionCards" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VGBModelStoreContainer" CdmEntityContainer="VGBEntities">
+          <EntitySetMapping Name="Deliveries">
+            <EntityTypeMapping TypeName="VGBModel.Delivery">
+              <MappingFragment StoreEntitySet="Delivery">
+                <ScalarProperty Name="deliveryId" ColumnName="deliveryId" />
+                <ScalarProperty Name="partyName" ColumnName="partyName" />
+                <ScalarProperty Name="productionId" ColumnName="productionId" />
+                <ScalarProperty Name="deliveryStatus" ColumnName="deliveryStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobWorks">
+            <EntityTypeMapping TypeName="VGBModel.JobWork">
+              <MappingFragment StoreEntitySet="JobWork">
+                <ScalarProperty Name="JobWorkId" ColumnName="JobWorkId" />
+                <ScalarProperty Name="Created_By" ColumnName="Created_By" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="PLNo" ColumnName="PLNo" />
+                <ScalarProperty Name="DCNO" ColumnName="DCNO" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="NetWt" ColumnName="NetWt" />
+                <ScalarProperty Name="TotalRolls" ColumnName="TotalRolls" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="VGBModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ordersInvoiceNo" ColumnName="ordersInvoiceNo" />
+                <ScalarProperty Name="Rsize" ColumnName="Rsize" />
+                <ScalarProperty Name="Gsm" ColumnName="Gsm" />
+                <ScalarProperty Name="Colour" ColumnName="Colour" />
+                <ScalarProperty Name="NetWt" ColumnName="NetWt" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="BagSize" ColumnName="BagSize" />
+                <ScalarProperty Name="RollStatus" ColumnName="RollStatus" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="PartyName" ColumnName="PartyName" />
+                <ScalarProperty Name="PLNo" ColumnName="PLNo" />
+                <ScalarProperty Name="DCNo" ColumnName="DCNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PackingLists">
+            <EntityTypeMapping TypeName="VGBModel.PackingList">
+              <MappingFragment StoreEntitySet="PackingList">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="S_No" ColumnName="S.No" />
+                <ScalarProperty Name="Item" ColumnName="Item" />
+                <ScalarProperty Name="Roll_No" ColumnName="Roll No" />
+                <ScalarProperty Name="Colour" ColumnName="Colour" />
+                <ScalarProperty Name="Gsm" ColumnName="Gsm" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="RollStatus" ColumnName="RollStatus" />
+                <ScalarProperty Name="NetWt" ColumnName="NetWt" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="JobWorkId" ColumnName="JobWorkId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductionCards">
+            <EntityTypeMapping TypeName="VGBModel.ProductionCard">
+              <MappingFragment StoreEntitySet="ProductionCard">
+                <ScalarProperty Name="productionId" ColumnName="productionId" />
+                <ScalarProperty Name="JobWorkId" ColumnName="JobWorkId" />
+                <ScalarProperty Name="Created_By" ColumnName="Created_By" />
+                <ScalarProperty Name="Rsize" ColumnName="Rsize" />
+                <ScalarProperty Name="Gsm" ColumnName="Gsm" />
+                <ScalarProperty Name="Colour" ColumnName="Colour" />
+                <ScalarProperty Name="PCol" ColumnName="PCol" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="BagSize" ColumnName="BagSize" />
+                <ScalarProperty Name="Kgs" ColumnName="Kgs" />
+                <ScalarProperty Name="NoOfPCS" ColumnName="NoOfPCS" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="partyName" ColumnName="partyName" />
+                <ScalarProperty Name="shift" ColumnName="shift" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="PLNo" ColumnName="PLNo" />
+                <ScalarProperty Name="DCNO" ColumnName="DCNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

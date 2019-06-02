@@ -1,0 +1,112 @@
+﻿@model VGB.Models.JobWork
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<br />
+<hr />
+    <table class="table table-bordered" border="1" id="myt">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.JobWorkId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Created_By)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rsize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gsm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Colour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NetWt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BagSize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RollStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PartyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PLNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DCNO)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InvoiceNo)
+            </th>
+        </tr>
+        <tr class="nameSearch">
+            <td>
+                @Html.DisplayFor(model => model.JobWorkId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Created_By)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Rsize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Gsm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Colour)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.NetWt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.BagSize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.RollStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Remarks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.PartyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.PLNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.DCNO)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.InvoiceNo)
+            </td>
+
+           </table>
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+    

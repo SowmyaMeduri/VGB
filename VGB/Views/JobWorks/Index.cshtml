@@ -1,0 +1,319 @@
+﻿@*@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<VGB.Models.JobWork>
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+}
+
+<h2>Inward Status</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<p>
+    <input type="search" id="search" name="searchText" placeholder="search" class="form-control" />
+</p>
+@using (Html.BeginForm("ExportToExcel", "JobWorks", FormMethod.Post))
+{
+    <table class="table table-bordered" border="1" id="myt">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().JobWorkId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Created_By)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().NetWt)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.First().TotalRolls)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().CustomerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().PLNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().DCNO)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().InvoiceNo)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+        @if (Model.Count() == 0)
+        {
+            <tr>
+                <td colspan="14"> No party found with your search...Try again</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr class="nameSearch">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.JobWorkId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NetWt)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalRolls)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PLNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DCNO)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InvoiceNo)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Select", null, null, new { @onclick = "return GetSelectedRow(item.JobWorkId);" })
+                    </td>
+                    <td>
+                        @* @Html.ActionLink("Edit", "Edit", "JobWorks", new { id = item.JobWorkId }, null) |*@
+                        @*@Html.ActionLink("Details", "Details", new { id = item.jobWorkInvoiceNo }) |*@
+                        @*@Html.ActionLink("Delete", "null", "null", new { @onclick = "return DeleteConfirmation(item.JobWorkId);" })
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#search').keyup(function () {
+                search_table($(this).val());
+            });
+            function search_table(value) {
+                $('#myt tr').each(function () {
+                    var found = 'false';
+                    $(this).each(function () {
+                        if ($(this).text().toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+                            found = 'true';
+                        }
+                    });
+                    if (found == 'true') {
+                        $(this).show();
+                    }
+                    else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+    </script>
+    @Html.PagedListPager(Model, pageNo => Url.Action("Index", new { pageNo, name = Request.QueryString["name"] }))
+    <input type="submit" value="Export to Excel" class="button" />
+    <input type="button" value="print" onclick="printTbl()" />
+    <script type="text/javascript">
+        function printTbl() {
+            debugger
+            var TableToPrint = myt;
+            debugger
+            newWin = window.open("");
+            newWin.document.write(TableToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+    </script>
+
+    <script>
+        function GetSelectedRow(id) {
+            debugger;
+            var x = id;
+        }
+        function DeleteConfirmation(id) {
+            debugger;
+        }
+    </script>
+
+
+
+}*@
+<h2>JobWork Details</h2>
+<html>
+<head>
+    <style>
+        .btn
+        {
+            display:table-cell !important;
+        }
+    </style>
+</head>
+<body>
+    @*href="@Url.Action("Create", "JobWorks")"*@
+    <a class="btn btn-success" id="addButton" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("Create", "JobWorks")')"><i class="fa fa-plus"></i> Add New</a>
+
+    <table id="jobWorksTable" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>JobWorkId</th>
+                <th>Created_By</th>
+                <th>NetWt</th>
+                <th>TotalRolls</th>
+                <th>CustomerName</th>
+                <th>Date</th>
+                <th>PLNo</th>
+                <th>DCNO</th>
+                <th>InvoiceNo</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+
+   
+
+
+
+    <script>
+        var popup, dataTable,pakingId;
+        $(document).ready(function () {
+            debugger;
+            dataTable=  $("#jobWorksTable").DataTable({
+                "ajax": {
+                    "url": "/JobWorks/GetList",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "JobWorkId" },
+                    { "data": "Created_By" },
+                    { "data": "NetWt" },
+                    { "data": "TotalRolls" },
+                    { "data": "CustomerName" },
+                    {
+                        "data": "Date",
+                        render: function (d) {
+                            return moment(d).format("DD:MM:YYYY");
+                        }},
+                    { "data": "PLNo" },
+                    { "data": "DCNO" },
+                    { "data": "InvoiceNo" },
+                    {
+                        "data":"JobWorkId" , "render" : function (data) {
+                            return "<a class='btn btn-default btn-sm'  onclick=PopupForm('@Url.Action("PackingListData", "PackingLists")/" + data + "')><i class='fa fa-list'></i> PakingList</a> <a class='btn btn-danger btn-sm' style='margin-left:10px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                            //return "<a class='btn btn-default btn-sm' onclick=OpenPakingListData(" + data +")><i class='fa fa-list'></i> PakingList</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+        },
+                        "orderable": false,
+                        "searchable":false,
+                        "width":"200px"
+                    }
+                ],
+                "language": {
+
+                    "emptyTable": "No data found, Please click on <b>Add New</b> Button"
+                },
+                "dom": "Bfrtip",
+                "buttons": [
+                    //{
+                    //    extend: 'copy',
+                    //    className: 'copyButton',
+                    //    text: '<i class="fa fa-clone"></i> Copy'
+                    //},
+                    {
+                        extend: 'excel',
+                        text: '<i class="fa fa-file-excel-o"></i> Excel'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="fa fa-file-pdf-o"></i> Pdf'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="fa fa-file-excel-o"></i> CSV'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        customize: function (win) {
+                            $(win.document.body)
+                                .css('font-size', '10pt')
+                                .prepend(
+                                    '<img src="http://datatables.net/media/images/logo-fade.png" style="position:absolute; top:0; left:0;" />'
+                                );
+
+                            $(win.document.body).find('table')
+                                .addClass('compact')
+                                .css('font-size', 'inherit');
+                        }
+                    },
+                ]
+            });
+        });
+        function PopupForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+                    debugger;
+                    Popup = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        title: 'Create JobWorks Details',
+                        height: 500,
+                        width: 700,
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                        }
+
+                    });
+                });
+        }
+
+        function Delete(id) {
+            debugger;
+            if(confirm('Are You Sure to Delete this Record ?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete", "JobWorks")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+
+                });
+            }
+        }
+
+    </script>
+</body>
+</html>
+
+
+
+
+

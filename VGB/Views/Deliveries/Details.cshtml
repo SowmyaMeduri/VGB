@@ -1,0 +1,42 @@
+﻿@model VGB.Models.Delivery
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Delivery</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.partyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.partyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.deliveryStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.deliveryStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductionCard.Rsize)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductionCard.Rsize)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.deliveryId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
