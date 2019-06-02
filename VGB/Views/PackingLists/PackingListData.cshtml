@@ -142,7 +142,7 @@
                     {
                         "data": "RollStatus",
                         "orderable": false,
-                        "searchable": false,
+                        "searchable": true,
                         "render": function (data, type, row, meta) {
                             debugger;
                             if (data.trim() == "Open") {
@@ -166,6 +166,7 @@
                 initComplete: function () {
                     debugger;
                     this.api().columns().every(function () {
+                        debugger;
                         var column = this;
                         var ddmenu = cbDropdown($(column.header()))
                             .on('change', ':checkbox', function () {
